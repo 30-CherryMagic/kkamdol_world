@@ -91,8 +91,9 @@ body.loading{overflow:hidden}
 .toc a.active{background:var(--main);color:#fff}
 .nav-btn,.nav-backdrop{display:none}
 .nav-measuring .toc,.nav-measuring .toc *{transition:none!important}
+  .nav-compact.kv-in-view:not(.nav-open) .nav-btn{opacity:0;transform:scale(.6);pointer-events:none}
   .nav-compact .nav-btn{display:grid;place-items:center;position:fixed;top:12px;right:12px;z-index:30;width:46px;height:46px;border:0;border-radius:50%;
-    background:var(--main);color:#fff;box-shadow:0 6px 18px rgba(20,40,100,.3);cursor:pointer}
+    background:var(--main);color:#fff;box-shadow:0 6px 18px rgba(20,40,100,.3);cursor:pointer;transition:opacity .3s,transform .3s}
   .nav-compact .nav-btn span,.nav-compact .nav-btn span::before,.nav-compact .nav-btn span::after{display:block;width:20px;height:2px;border-radius:2px;background:#fff;position:relative;transition:transform .25s,background .25s}
   .nav-compact .nav-btn span::before,.nav-compact .nav-btn span::after{content:"";position:absolute;left:0}
   .nav-compact .nav-btn span::before{top:-6px}.nav-compact .nav-btn span::after{top:6px}
@@ -281,6 +282,9 @@ function initNav(app){
   };
   measure(); fit(); addEventListener("resize", fit);
   document.fonts?.ready.then(() => { measure(); fit(); });
+  // 漢堡按鈕：KV 從畫面消失後才出現
+  const hero = app.querySelector(".hero");
+  if (hero) new IntersectionObserver(([e]) => document.body.classList.toggle("kv-in-view", e.isIntersecting)).observe(hero);
   // 目前位置標示
   const links = [...toc.querySelectorAll('a[href^="#"]')];
   const map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
