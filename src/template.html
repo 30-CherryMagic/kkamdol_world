@@ -55,24 +55,23 @@ body{margin:0;background:var(--bg);color:var(--ink);
 .toc a:hover{background:var(--soft);color:var(--main)}
 .toc a.active{background:var(--main);color:#fff}
 .nav-btn,.nav-backdrop{display:none}
-@media (max-width:760px){
-  .nav-btn{display:grid;place-items:center;position:fixed;top:12px;right:12px;z-index:30;width:46px;height:46px;border:0;border-radius:50%;
+.nav-measuring .toc,.nav-measuring .toc *{transition:none!important}
+  .nav-compact .nav-btn{display:grid;place-items:center;position:fixed;top:12px;right:12px;z-index:30;width:46px;height:46px;border:0;border-radius:50%;
     background:var(--main);color:#fff;box-shadow:0 6px 18px rgba(20,40,100,.3);cursor:pointer}
-  .nav-btn span,.nav-btn span::before,.nav-btn span::after{display:block;width:20px;height:2px;border-radius:2px;background:#fff;position:relative;transition:transform .25s,background .25s}
-  .nav-btn span::before,.nav-btn span::after{content:"";position:absolute;left:0}
-  .nav-btn span::before{top:-6px}.nav-btn span::after{top:6px}
-  .nav-open .nav-btn span{background:transparent}
-  .nav-open .nav-btn span::before{transform:translateY(6px) rotate(45deg)}
-  .nav-open .nav-btn span::after{transform:translateY(-6px) rotate(-45deg)}
-  .nav-backdrop{display:block;position:fixed;inset:0;z-index:24;background:rgba(10,20,50,.35);opacity:0;pointer-events:none;transition:opacity .25s}
-  .nav-open .nav-backdrop{opacity:1;pointer-events:auto}
-  .toc{position:fixed;top:0;right:0;bottom:0;z-index:25;margin:0;width:min(78vw,300px);max-width:none;flex-direction:column;gap:4px;
+  .nav-compact .nav-btn span,.nav-compact .nav-btn span::before,.nav-compact .nav-btn span::after{display:block;width:20px;height:2px;border-radius:2px;background:#fff;position:relative;transition:transform .25s,background .25s}
+  .nav-compact .nav-btn span::before,.nav-compact .nav-btn span::after{content:"";position:absolute;left:0}
+  .nav-compact .nav-btn span::before{top:-6px}.nav-compact .nav-btn span::after{top:6px}
+  .nav-compact.nav-open .nav-btn span{background:transparent}
+  .nav-compact.nav-open .nav-btn span::before{transform:translateY(6px) rotate(45deg)}
+  .nav-compact.nav-open .nav-btn span::after{transform:translateY(-6px) rotate(-45deg)}
+  .nav-compact .nav-backdrop{display:block;position:fixed;inset:0;z-index:24;background:rgba(10,20,50,.35);opacity:0;pointer-events:none;transition:opacity .25s}
+  .nav-compact.nav-open .nav-backdrop{opacity:1;pointer-events:auto}
+  .nav-compact .toc{position:fixed;top:0;right:0;bottom:0;z-index:25;margin:0;width:min(78vw,300px);max-width:none;flex-direction:column;gap:4px;
     padding:76px 16px 24px;border-radius:20px 0 0 20px;background:#fff;border:0;box-shadow:-10px 0 30px rgba(20,40,100,.18);
     transform:translateX(105%);transition:transform .3s ease;overflow-y:auto}
-  .nav-open .toc{transform:none}
-  .toc a{font-size:1rem;padding:12px 16px;border-radius:12px}
-  body.nav-open{overflow:hidden}
-}
+  .nav-compact.nav-open .toc{transform:none}
+  .nav-compact .toc a{font-size:1rem;padding:12px 16px;border-radius:12px}
+  body.nav-compact.nav-open{overflow:hidden}
 main{max-width:960px;margin:0 auto;padding:28px 16px 40px}
 .card{background:var(--card);border-radius:18px;padding:28px clamp(18px,4vw,36px);margin-bottom:22px;
   box-shadow:0 2px 12px rgba(10,25,90,.07);scroll-margin-top:64px}
@@ -146,8 +145,6 @@ ul.check li::marker{content:"✓  ";color:var(--main)}
 .spec{min-width:560px}
 .foot{text-align:center;color:var(--muted);font-size:.8rem;padding:20px 16px 40px}
 .foot a{color:var(--main)}
-.logout{position:fixed;right:14px;bottom:14px;z-index:9;border:0;border-radius:99px;padding:8px 14px;
-  background:var(--main);color:#fff;box-shadow:0 4px 14px rgba(10,25,90,.25);cursor:pointer;font-family:inherit;font-size:.8rem}
 </style>
 </head>
 <body>
@@ -178,8 +175,7 @@ async function unlock(id, pw){
 }
 function render(html){
   const app = document.getElementById("app");
-  app.innerHTML = html + '<button class="logout" type="button">登出</button>';
-  app.querySelector(".logout").onclick = () => { sessionStorage.removeItem(AUTH_KEY); location.reload(); };
+  app.innerHTML = html;
   document.getElementById("gate").remove();
   app.style.display = "block";
   const hero = app.querySelector(".hero");
@@ -207,6 +203,22 @@ function initNav(app){
   bd.onclick = () => set(false);
   toc.addEventListener("click", e => { if (e.target.closest("a")) set(false); });
   addEventListener("keydown", e => { if (e.key === "Escape") set(false); });
+  // 目錄放不下時切換成漢堡選單（依實際寬度判斷，不限裝置）
+  let need = 0;
+  const measure = () => {                          // 量目錄完整寬度（只在初始化與字型載入後）
+    const b = document.body, was = b.classList.contains("nav-compact");
+    b.classList.add("nav-measuring"); b.classList.remove("nav-compact");
+    need = toc.scrollWidth + 32;                   // ＋左右留白
+    b.classList.toggle("nav-compact", was); void toc.offsetWidth;
+    requestAnimationFrame(() => b.classList.remove("nav-measuring"));
+  };
+  const fit = () => {
+    const compact = need > document.documentElement.clientWidth;
+    if (!compact && document.body.classList.contains("nav-open")) set(false);
+    document.body.classList.toggle("nav-compact", compact);
+  };
+  measure(); fit(); addEventListener("resize", fit);
+  document.fonts?.ready.then(() => { measure(); fit(); });
   // 目前位置標示
   const links = [...toc.querySelectorAll('a[href^="#"]')];
   const map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
