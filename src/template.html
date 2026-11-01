@@ -8,16 +8,64 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@500;600;700&family=Mooli&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <title>깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理</title>
+<script>
+/* ---------- 語言：?lang= → 上次選擇 → 瀏覽器語言 → 預設（第一個） ---------- */
+const LANGS = /*LANGS*/null || [{ code: "zh-Hant", name: "繁體中文", label: "此為受保護的頁面" }];
+const I18N = {
+  "zh-Hant": { html: "zh-Hant-TW", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理",
+    prompt: "請輸入 ID 與 PASSWORD 以瀏覽內容", login: "登入", err: "ID 或 PASSWORD 錯誤", loading: "載入中",
+    navOpen: "開啟目錄", navClose: "關閉目錄", lang: "語言", news: "最新消息（可捲動）",
+    newsMore: n => `共 ${n} 則，在清單內往下捲動可看更早的消息` },
+  "zh-Hans": { html: "zh-Hans", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜简中版资料整理",
+    prompt: "请输入 ID 和 PASSWORD 以浏览内容", login: "登录", err: "ID 或 PASSWORD 错误", loading: "加载中",
+    navOpen: "打开目录", navClose: "关闭目录", lang: "语言", news: "最新消息（可滚动）",
+    newsMore: n => `共 ${n} 条，在列表内向下滚动可查看更早的消息` },
+  "ja": { html: "ja", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜日本語版 資料まとめ",
+    prompt: "ID と PASSWORD を入力してください", login: "ログイン", err: "ID または PASSWORD が正しくありません", loading: "読み込み中",
+    navOpen: "目次を開く", navClose: "目次を閉じる", lang: "言語", news: "お知らせ（スクロールできます）",
+    newsMore: n => `全 ${n} 件｜リスト内をスクロールすると過去のお知らせを見られます` },
+  "ko": { html: "ko", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜한국어판 자료 정리",
+    prompt: "내용을 보려면 ID와 PASSWORD를 입력해 주세요", login: "로그인", err: "ID 또는 PASSWORD가 올바르지 않습니다", loading: "로딩 중",
+    navOpen: "목차 열기", navClose: "목차 닫기", lang: "언어", news: "새 소식(스크롤 가능)",
+    newsMore: n => `총 ${n}건 · 목록 안에서 아래로 스크롤하면 이전 소식을 볼 수 있습니다` },
+  "en": { html: "en", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT | Creator Guide",
+    prompt: "Enter your ID and PASSWORD to view this page.", login: "Log in", err: "Incorrect ID or PASSWORD", loading: "Loading",
+    navOpen: "Open menu", navClose: "Close menu", lang: "Language", news: "News (scrollable)",
+    newsMore: n => `${n} posts in total — scroll within the list to see older news` },
+};
+const LANG = (() => {
+  const codes = LANGS.map(l => l.code), ok = c => codes.includes(c) ? c : null;
+  const q = ok(new URLSearchParams(location.search).get("lang"));
+  let saved = null; try { saved = localStorage.getItem("kk_lang"); } catch {}
+  if (q) { try { localStorage.setItem("kk_lang", q); } catch {} }
+  const nav = () => {
+    for (const l of navigator.languages || [navigator.language || ""]) {
+      const s = l.toLowerCase();
+      const c = s.startsWith("zh") ? (/hans|-cn|-sg|-my/.test(s) ? "zh-Hans" : "zh-Hant") : s.split("-")[0];
+      if (ok(c)) return c;
+    }
+  };
+  return q || ok(saved) || nav() || codes[0];
+})();
+const T = I18N[LANG] || I18N["zh-Hant"];
+document.documentElement.lang = T.html;
+document.title = T.title;
+</script>
 <style>
 :root{
   --bg:#eef2fa; --ink:#141a2e; --muted:#5d6580; --card:#fff;
   --main:#1f4fd8; --main-d:#123596; --neon:#c4fc28; --line:#dde4f2; --soft:#e8eefc;
   --grad:#1f4fd8;
+  --cjk:"Noto Sans TC";
 }
+/* 依語言使用對應字形（漢字字形因地區不同） */
+:root:lang(zh-Hans){--cjk:"Noto Sans SC"}
+:root:lang(ja){--cjk:"Noto Sans JP"}
+:root:lang(ko){--cjk:"Noto Sans KR"}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Noto Sans","Noto Sans TC","Noto Sans JP","Noto Sans KR","Noto Sans SC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.75}
+  font-family:"Noto Sans",var(--cjk),"Noto Sans TC","Noto Sans JP","Noto Sans KR","Noto Sans SC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.75}
 /* ---------- login ---------- */
 #gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--grad)}
 #gate form{background:#fff;border-radius:20px;padding:36px 32px;width:min(380px,100%);
@@ -27,9 +75,9 @@ body{margin:0;background:var(--bg);color:var(--ink);
 #gate label{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin:14px 0 6px;letter-spacing:.08em}
 #gate input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:1rem;font-family:inherit}
 #gate input:focus{outline:none;border-color:var(--main);box-shadow:0 0 0 3px rgba(31,79,216,.22)}
-#gate button{margin-top:22px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--main);
+#gate #btn{margin-top:22px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--main);
   color:#fff;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
-#gate button:disabled{opacity:.6;cursor:wait}
+#gate #btn:disabled{opacity:.6;cursor:wait}
 #err{color:#d33;font-size:.85rem;min-height:1.3em;margin-top:10px}
 /* ---------- loading ---------- */
 body.loading{overflow:hidden}
@@ -57,10 +105,10 @@ body.loading{overflow:hidden}
 .kc-heart{top:calc(var(--u) * 26);font-size:calc(var(--u) * 12);line-height:calc(var(--u) * 14)}
 .kc-tag{top:calc(var(--u) * 49);font-family:"MuseoModerno",sans-serif;font-weight:600;font-size:calc(var(--u) * 14);letter-spacing:.1em;color:#1265ff}
 .kc-main{top:calc(var(--u) * 82);font-family:"Black Han Sans",sans-serif;font-size:calc(var(--u) * 92);letter-spacing:.1em;line-height:calc(var(--u) * 86)}
-.kc-pair{top:calc(var(--u) * 163);font-family:"MuseoModerno","Noto Sans TC",sans-serif;font-weight:600;font-size:calc(var(--u) * 14);letter-spacing:.2em}
-.kc-sub{top:calc(var(--u) * 234);font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:700;font-size:calc(var(--u) * 20);letter-spacing:.3em}
+.kc-pair{top:calc(var(--u) * 163);font-family:"MuseoModerno",var(--cjk),sans-serif;font-weight:600;font-size:calc(var(--u) * 14);letter-spacing:.2em}
+.kc-sub{top:calc(var(--u) * 234);font-family:var(--cjk),"Noto Sans",sans-serif;font-weight:700;font-size:calc(var(--u) * 20);letter-spacing:.3em}
 .kc-en{top:calc(var(--u) * 263);font-family:"Moulpali",sans-serif;font-size:calc(var(--u) * 10);letter-spacing:.1em;color:#afafaf}
-.kc-note{top:calc(var(--u) * 285);font-family:"Mooli","Noto Sans TC",sans-serif;font-size:calc(var(--u) * 10);letter-spacing:.1em;line-height:calc(var(--u) * 22)}
+.kc-note{top:calc(var(--u) * 285);font-family:"Mooli",var(--cjk),sans-serif;font-size:calc(var(--u) * 10);letter-spacing:.1em;line-height:calc(var(--u) * 22)}
 @media (max-width:640px){.kv-card{left:50%;transform:translateX(-50%)}}
 .kc-tag-heart,.kc-rule,.kc-note-pc{display:none}
 /* PC：橫向面板（依 Figma 10:113） */
@@ -72,15 +120,26 @@ body.loading{overflow:hidden}
   .kc-tag-heart{display:inline}
   .kc-tag{left:calc(var(--u) * 37);top:calc(var(--u) * 33);font-size:calc(var(--u) * 19);line-height:calc(var(--u) * 30)}
   .kc-en{left:auto;right:calc(var(--u) * 37);top:calc(var(--u) * 38);width:calc(var(--u) * 134);white-space:normal;text-align:right;
-    font-family:"Noto Sans","Noto Sans TC",sans-serif;font-weight:700;font-size:calc(var(--u) * 9);letter-spacing:.1em}
+    font-family:"Noto Sans",var(--cjk),sans-serif;font-weight:700;font-size:calc(var(--u) * 9);letter-spacing:.1em}
   .kc-main{left:calc(var(--u) * 33);width:calc(var(--u) * 169.4);text-align:center;top:calc(var(--u) * 157)}
-  .kc-pair,.kc-sub{left:calc(var(--u) * 206);font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:600;line-height:1.431}
+  .kc-pair,.kc-sub{left:calc(var(--u) * 206);font-family:var(--cjk),"Noto Sans",sans-serif;font-weight:600;line-height:1.431}
   .kc-pair{top:calc(var(--u) * 186);font-size:calc(var(--u) * 14);letter-spacing:.095em}
   .kc-sub{top:calc(var(--u) * 206);font-size:calc(var(--u) * 17);letter-spacing:.1235em}
   .kc-rule{display:block;position:absolute;left:calc(var(--u) * 37);top:calc(var(--u) * 250 - .5px);width:calc(var(--u) * 405);height:1px;background:#ccc}
-  .kc-note-pc{display:block;left:calc(var(--u) * 32);top:calc(var(--u) * 266);font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:500;
+  .kc-note-pc{display:block;left:calc(var(--u) * 32);top:calc(var(--u) * 266);font-family:var(--cjk),"Noto Sans",sans-serif;font-weight:500;
     font-size:calc(var(--u) * 13);line-height:calc(var(--u) * 22);letter-spacing:.04em}
   .kc-note-pc b{font-weight:700}
+}
+/* KV 面板：文字較長的語言只調整字距／大小，避免超出面板 */
+@media (max-width:640px){
+  :root:lang(ko) .kc-sub{letter-spacing:.215em}
+  :root:lang(en) .kc-sub{top:calc(var(--u) * 214);width:calc(var(--u) * 190);white-space:normal;font-size:calc(var(--u) * 17);
+    line-height:calc(var(--u) * 21);letter-spacing:.06em}
+}
+@media (min-width:641px){
+  :root:lang(en) .kc-sub{letter-spacing:.04em}
+  :root:lang(ko) .kc-pair{letter-spacing:.132em}               /* 韓文：兩行同寬（比照中文版） */
+  :root:lang(ko) .kc-sub{letter-spacing:.092em}
 }
 .toc{position:sticky;top:14px;z-index:15;display:flex;gap:2px;width:fit-content;max-width:calc(100% - 32px);overflow-x:auto;
   margin:18px auto 0;padding:6px;border-radius:99px;background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
@@ -190,17 +249,61 @@ ul.check li::marker{content:"✓  ";color:var(--main)}
 .q-num .inf{width:30px;height:30px;align-self:center}
 .q-num:has(.inf){align-items:center;font-size:1.3rem}
 .q-note{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.news-list{list-style:none;margin:0;padding:0}
+.news-list.scrollable{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-bottom:1px solid var(--line)}
+.news-more{margin:10px 0 0;font-size:.85rem;color:var(--muted)}
+.news-list.scrollable:focus-visible{outline:2px solid var(--main);outline-offset:4px}
+.news-list li{display:grid;grid-template-columns:7.5em 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.news-list li:first-child{border-top:0}
+.news-list time{color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums;padding-top:.1em}
+.news-list p{margin:0;white-space:pre-line;overflow-wrap:anywhere}
+.news-list a{color:var(--main)}
+.news-empty{margin:0;color:var(--muted)}
+.news-list:has(li) ~ .news-empty{display:none}
+@media (max-width:640px){.news-list li{grid-template-columns:1fr;gap:2px}}
 .scroll{overflow-x:auto}
 .spec{min-width:560px}
 .foot{text-align:center;color:var(--muted);font-size:.8rem;padding:20px 16px 40px}
 .foot a{color:var(--main)}
+/* ---------- 語言切換（不用國旗，以各語言自稱標示） ---------- */
+.lang-sw{position:relative;z-index:20;font-family:"Noto Sans",var(--cjk),sans-serif;line-height:1.4}
+.lang-btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border:1px solid rgba(255,255,255,.7);border-radius:99px;
+  background:rgba(255,255,255,.92);color:var(--ink);font:inherit;font-size:.86rem;font-weight:500;cursor:pointer;
+  box-shadow:0 4px 14px rgba(10,40,90,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.lang-btn:focus-visible,.lang-menu a:focus-visible{outline:2px solid var(--main);outline-offset:2px}
+.lang-btn .g{width:18px;height:18px;color:var(--main);flex:none}
+.lang-btn .c{width:10px;height:10px;opacity:.6;transition:transform .2s}
+.lang-btn[aria-expanded="true"] .c{transform:rotate(180deg)}
+.lang-menu{position:absolute;right:0;top:calc(100% + 6px);min-width:148px;margin:0;padding:6px;list-style:none;background:#fff;
+  border-radius:14px;box-shadow:0 12px 32px rgba(10,30,90,.24)}
+.lang-menu[hidden]{display:none}
+.lang-menu a{display:block;padding:8px 12px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:.92rem;white-space:nowrap}
+.lang-menu a:hover{background:var(--soft);color:var(--main)}
+.lang-menu a[aria-current]{color:var(--main);font-weight:700}
+.lang-menu a[aria-current]::after{content:" ✓"}
+.lang-gate{position:fixed;top:16px;right:16px}
+.hero-wrap{position:relative}
+.lang-kv{position:absolute;top:16px;right:max(16px, calc((100% - 960px) / 2 + 16px))}
+@media (max-width:640px){                       /* SP：KV 面板右側空間有限 → 只顯示地球圖示 */
+  .lang-kv{top:10px;right:8px}
+  .lang-kv .lang-btn{width:40px;height:40px;padding:0;justify-content:center}
+  .lang-kv .lang-btn .t,.lang-kv .lang-btn .c{display:none}
+  .lang-kv .lang-btn .g{width:20px;height:20px}
+}
+@media (max-width:359px){.lang-kv{top:auto;bottom:12px}.lang-kv .lang-menu{top:auto;bottom:calc(100% + 6px)}}
+.toc-lang{display:none}
+.nav-compact .toc-lang{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding:16px 4px 0;border-top:1px solid var(--line)}
+.nav-compact .toc-lang .h{width:100%;display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);font-weight:700;letter-spacing:.06em}
+.nav-compact .toc-lang .h svg{width:16px;height:16px;color:var(--main)}
+.nav-compact .toc .toc-lang a{font-size:.88rem;padding:6px 12px;border:1px solid var(--line);border-radius:99px}
+.nav-compact .toc .toc-lang a[aria-current]{background:var(--main);border-color:var(--main);color:#fff}
 </style>
 </head>
 <body>
 <div id="gate">
   <form id="login" autocomplete="on">
-    <h1>🔒 __LABEL__</h1>
-    <p>請輸入 ID 與 PASSWORD 以瀏覽內容</p>
+    <h1>🔒 <span id="g-label">__LABEL__</span></h1>
+    <p id="g-prompt">請輸入 ID 與 PASSWORD 以瀏覽內容</p>
     <label for="uid">ID</label>
     <input id="uid" name="username" autocomplete="username" required autofocus>
     <label for="pw">PASSWORD</label>
@@ -212,6 +315,52 @@ ul.check li::marker{content:"✓  ";color:var(--main)}
 <div id="app"></div>
 <script>
 const PAYLOAD = /*PAYLOAD*/null;
+/* ---------- 語言切換 ---------- */
+const CUR = LANGS.find(l => l.code === LANG) || LANGS[0];
+const GLOBE = '<svg class="g" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>';
+function goLang(code){                                   // 重新載入（登入狀態保留在 sessionStorage），停在目前段落
+  try { localStorage.setItem("kk_lang", code); } catch {}
+  const u = new URL(location.href); u.searchParams.set("lang", code);
+  const act = document.querySelector(".toc a.active");
+  u.hash = act ? act.getAttribute("href") : (location.hash || "");
+  location.assign(u.href);
+}
+function langLinks(){
+  return LANGS.map(l => {
+    const a = document.createElement("a");
+    a.href = "?lang=" + l.code; a.lang = I18N[l.code]?.html || l.code; a.hreflang = a.lang; a.textContent = l.name;
+    if (l.code === CUR.code) a.setAttribute("aria-current", "true");
+    a.addEventListener("click", e => { e.preventDefault(); if (l.code !== CUR.code) goLang(l.code); });
+    return a;
+  });
+}
+function langSwitcher(cls){
+  if (LANGS.length < 2) return null;
+  const wrap = document.createElement("div"); wrap.className = "lang-sw " + cls;
+  const btn = document.createElement("button"); btn.type = "button"; btn.className = "lang-btn";
+  btn.setAttribute("aria-haspopup", "true"); btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-label", `${T.lang}: ${CUR.name}`); btn.title = T.lang;
+  btn.innerHTML = GLOBE + '<span class="t"></span><svg class="c" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+  btn.querySelector(".t").textContent = CUR.name;
+  const menu = document.createElement("ul"); menu.className = "lang-menu"; menu.hidden = true;
+  langLinks().forEach(a => { const li = document.createElement("li"); li.append(a); menu.append(li); });
+  const set = open => { menu.hidden = !open; btn.setAttribute("aria-expanded", String(open)); };
+  btn.onclick = () => set(menu.hidden);
+  document.addEventListener("click", e => { if (!wrap.contains(e.target)) set(false); });
+  addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { set(false); btn.focus(); } });
+  wrap.append(btn, menu);
+  return wrap;
+}
+/* 登入畫面文字 */
+document.getElementById("g-label").textContent = CUR.label;
+document.getElementById("g-prompt").textContent = T.prompt;
+document.getElementById("btn").textContent = T.login;
+{ const sw = langSwitcher("lang-gate"); if (sw) document.getElementById("gate").append(sw); }
+/* 解密內容：新格式 {v:2, pages:{語言:HTML}}，舊格式為單一 HTML */
+function pickPage(txt){
+  try { const j = JSON.parse(txt); if (j?.v === 2) return j.pages[CUR.code] ?? Object.values(j.pages)[0]; } catch {}
+  return txt;
+}
 const AUTH_KEY = "kk_auth:" + location.pathname.replace(/index\.html$/, "");
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 async function unlock(id, pw){
@@ -220,7 +369,7 @@ async function unlock(id, pw){
     {name:"PBKDF2", salt:b64(PAYLOAD.salt), iterations:PAYLOAD.iter, hash:"SHA-256"},
     base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
   const buf = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(PAYLOAD.iv)}, key, b64(PAYLOAD.data));
-  return new TextDecoder().decode(buf);
+  return pickPage(new TextDecoder().decode(buf));
 }
 let loaderDone = null;
 function render(html){
@@ -229,16 +378,20 @@ function render(html){
   document.getElementById("gate").remove();
   app.style.display = "block";
   const hero = app.querySelector(".hero");
-  if (hero) { const w = document.createElement("div"); w.className = "hero-wrap"; hero.before(w); w.append(hero); }
+  if (hero) {
+    const w = document.createElement("div"); w.className = "hero-wrap"; hero.before(w); w.append(hero);
+    const sw = langSwitcher("lang-kv"); if (sw) w.append(sw);
+  }
   const vis = app.querySelector(".hero-visual");
   if (vis) initWater(vis, loaderDone);
   initNav(app);
+  initNews(app);
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
 }
 /* ---------- 登入後 loading：海洋＋文字柔焦浮現，3 秒後淡出 ---------- */
 function showLoader(onDone){
   const el = document.createElement("div");
-  el.className = "loader"; el.setAttribute("role", "status"); el.setAttribute("aria-label", "載入中");
+  el.className = "loader"; el.setAttribute("role", "status"); el.setAttribute("aria-label", T.loading);
   el.innerHTML = '<div class="ld-txt"><span class="ld-1">kkamdol</span><span class="ld-2">Kiss・Hug</span></div>';
   document.body.append(el); document.body.classList.add("loading");
   const water = initWater(el);
@@ -248,19 +401,40 @@ function showLoader(onDone){
     setTimeout(() => { el.querySelector("canvas")?.getContext("webgl")?.getExtension("WEBGL_lose_context")?.loseContext(); el.remove(); document.body.classList.remove("loading"); onDone?.(); }, 700);
   }, 3000);
 }
+/* ---------- 最新消息：最多顯示三則，其餘捲動 ---------- */
+function initNews(app){
+  const list = app.querySelector(".news-list"); if (!list) return;
+  const MAX = 3; let more = null;
+  const fit = () => {
+    const items = list.querySelectorAll("li");
+    if (items.length <= MAX) { list.classList.remove("scrollable"); list.style.maxHeight = ""; list.removeAttribute("tabindex"); more?.remove(); more = null; return; }
+    list.style.maxHeight = "";
+    const h = items[MAX - 1].getBoundingClientRect().bottom - list.getBoundingClientRect().top;
+    list.style.maxHeight = Math.ceil(h) + "px";
+    list.classList.add("scrollable"); list.tabIndex = 0; list.setAttribute("aria-label", T.news);
+    if (!more) { more = document.createElement("p"); more.className = "news-more"; list.after(more); }
+    more.textContent = T.newsMore(items.length);
+  };
+  fit(); addEventListener("resize", fit); document.fonts?.ready.then(fit);
+}
 /* ---------- 導覽：PC 懸浮＋目前位置／SP 漢堡選單 ---------- */
 function initNav(app){
   const toc = app.querySelector(".toc"); if (!toc) return;
   toc.id = "site-nav";
   const btn = document.createElement("button");
   btn.className = "nav-btn"; btn.type = "button";
-  btn.setAttribute("aria-label", "開啟目錄"); btn.setAttribute("aria-controls", "site-nav"); btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-label", T.navOpen); btn.setAttribute("aria-controls", "site-nav"); btn.setAttribute("aria-expanded", "false");
   btn.innerHTML = "<span></span>";
+  if (LANGS.length > 1) {                          // SP 漢堡選單最下面的語言切換
+    const box = document.createElement("div"); box.className = "toc-lang";
+    const h = document.createElement("span"); h.className = "h"; h.innerHTML = GLOBE.replace('class="g" ', ""); h.append(T.lang);
+    box.append(h, ...langLinks()); toc.append(box);
+  }
   const bd = document.createElement("div"); bd.className = "nav-backdrop";
   app.append(btn, bd);
   const set = open => {
     document.body.classList.toggle("nav-open", open);
-    btn.setAttribute("aria-expanded", String(open)); btn.setAttribute("aria-label", open ? "關閉目錄" : "開啟目錄");
+    btn.setAttribute("aria-expanded", String(open)); btn.setAttribute("aria-label", open ? T.navClose : T.navOpen);
   };
   btn.onclick = () => set(!document.body.classList.contains("nav-open"));
   bd.onclick = () => set(false);
@@ -391,7 +565,7 @@ document.getElementById("login").addEventListener("submit", async e => {
     let done; loaderDone = new Promise(r => done = r);
     render(html); showLoader(done);
     sessionStorage.setItem(AUTH_KEY, JSON.stringify([id, pw]));
-  } catch { err.textContent = "ID 或 PASSWORD 錯誤"; btn.disabled = false; }
+  } catch { err.textContent = T.err; btn.disabled = false; }
 });
 (async () => {
   const saved = sessionStorage.getItem(AUTH_KEY);
