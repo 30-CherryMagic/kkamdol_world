@@ -166,7 +166,9 @@ ul.check li::before{content:"✓";color:var(--main)}
 .tbl{width:100%;border-collapse:collapse;font-size:.92rem;margin:8px 0}
 .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
 .tbl th{background:var(--soft);color:var(--main-d);font-size:.82rem;letter-spacing:.04em}
-.tbl td:first-child{white-space:nowrap}
+.tbl.nowrap-first td:first-child{white-space:nowrap}
+.tbl th{white-space:nowrap}
+.tbl.nowrap-2 td:nth-child(2){white-space:nowrap}
 .tbl td.todo{color:#b07a00;background:#fffaf0}
 .timeline{list-style:none;margin:8px 0 0;padding:0 0 0 28px;position:relative}
 .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:3px;border-radius:3px;
