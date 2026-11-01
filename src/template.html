@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@600&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <title>깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理</title>
 <style>
 :root{
@@ -36,7 +36,15 @@ body{margin:0;background:var(--bg);color:var(--ink);
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,48px);align-items:center;
   max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,32px) 44px}
 .hero-text{color:var(--ink);padding-top:44px}
-.hero h1{margin:.35em 0 .3em;font-size:clamp(1.9rem,4.2vw,3rem);line-height:1.12;letter-spacing:.01em;font-weight:900}
+/* 標題（依 Figma 設計：1em = 設計稿 10px） */
+.kv-title{display:flex;flex-direction:column;align-items:flex-start;margin:0 0 22px;font-size:clamp(10px,0.55vw + 8.5px,16px);
+  font-weight:400;line-height:1;color:#000}
+.kt-tag{position:relative;z-index:1;margin-left:.5em;font-family:"MuseoModerno",sans-serif;font-weight:600;font-size:1.4em;letter-spacing:.1em;color:#1265ff;line-height:1.57}
+.kt-heart{margin-left:.45em;font-size:.8em;letter-spacing:.1em;vertical-align:.05em}
+.kt-main{margin-top:.085em;font-family:"Black Han Sans",sans-serif;font-size:9.2em;letter-spacing:.1em;line-height:.8}
+.kt-sub{margin:-.1em 0 0 .3em;font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:700;font-size:2em;letter-spacing:.3em;line-height:1.35}
+.kt-en{margin:-.1em 0 0 .6em;font-family:"Moulpali",sans-serif;font-size:1em;letter-spacing:.1em;color:#afafaf;line-height:2.2}
+.hero-text .eyebrow + .sub{margin-top:12px}
 .eyebrow{display:inline-block;margin:0;background:var(--main);color:#fff;font-weight:700;font-size:.8rem;letter-spacing:.14em;
   padding:5px 12px;border-radius:99px}
 .sub{color:var(--muted);margin:0}
