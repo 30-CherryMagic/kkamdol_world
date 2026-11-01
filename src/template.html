@@ -273,7 +273,7 @@ vec2 dapple(vec2 p, float t){
   vec2 i = floor(p), f = fract(p); float core = 0.0, glow = 0.0;
   for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++){
     vec2 n = vec2(float(x), float(y)); vec2 h = hash2(i+n);
-    float r = mix(0.20, 0.85, pow(hash(i+n+7.7), 1.4));      // 隨機半徑：小光點多、大光斑少
+    float r = mix(0.18, 0.62, pow(hash(i+n+7.7), 1.4));      // 隨機半徑：小光點多、大光斑少
     vec2 o = 0.5 + 0.34*sin(t*0.6 + 6.2831*h);
     float d = length(n + o - f);
     core = max(core, (1.0 - smoothstep(r*0.12, r, d)) * (0.75 + 0.25*h.x));   // 邊緣拉長＝更模糊
@@ -298,10 +298,11 @@ void main(){
   vec3 aqua = vec3(0.14, 0.72, 0.93);
   vec3 col = mix(deep, aqua, 0.25 + 0.75*smoothstep(0.25, 0.75, swell));
   col *= 0.84 + 0.16*smoothstep(0.0, 0.9, length(vec2(uv.x, 1.0-uv.y)));   // 左上偏深
-  col = mix(col, vec3(0.86, 0.98, 1.0), light*0.88);
-  col += vec3(0.50, 0.80, 1.0) * bloom * 0.42;                 // bloom 光暈
-  col += vec3(1.0) * pow(light, 2.5) * 0.25;                   // 最亮處溢光
-  gl_FragColor = vec4(min(col, vec3(1.0)), 1.0);
+  col = mix(col, vec3(0.62, 0.88, 0.98), light*0.62);          // 淡青色光斑，不用純白
+  col += vec3(0.30, 0.60, 0.85) * bloom * 0.22;                 // bloom 光暈
+  col += vec3(0.75, 0.92, 1.0) * pow(light, 3.0) * 0.08;                   // 最亮處溢光
+  col = col / (1.0 + 0.35*max(col - 0.62, 0.0));               // 柔和壓縮高光，避免大面積發白
+  gl_FragColor = vec4(min(col, vec3(0.86, 0.95, 1.0)), 1.0);
 }`;
   const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
   const pr = gl.createProgram();
