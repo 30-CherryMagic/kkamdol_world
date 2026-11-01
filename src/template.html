@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@600&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@500;600;700&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <title>깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理</title>
 <style>
 :root{
@@ -31,6 +31,17 @@ body{margin:0;background:var(--bg);color:var(--ink);
   color:#fff;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit}
 #gate button:disabled{opacity:.6;cursor:wait}
 #err{color:#d33;font-size:.85rem;min-height:1.3em;margin-top:10px}
+/* ---------- loading ---------- */
+body.loading{overflow:hidden}
+.loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:#29a9dc;transition:opacity .7s ease}
+.loader.out{opacity:0;pointer-events:none}
+.loader canvas.water{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ld-txt{position:relative;z-index:1;text-align:center;color:#fff;font-family:"MuseoModerno",sans-serif;
+  text-shadow:0 1px 3px rgba(0,45,100,.45),0 2px 28px rgba(0,50,110,.6)}
+.ld-1{display:block;font-weight:700;font-size:clamp(44px,9vw,96px);letter-spacing:.06em;line-height:1.1;animation:ld-focus 1.6s cubic-bezier(.2,.7,.2,1) both}
+.ld-2{display:block;margin-top:.35em;font-weight:500;font-size:clamp(18px,3vw,30px);letter-spacing:.3em;animation:ld-focus 1.6s cubic-bezier(.2,.7,.2,1) .45s both}
+@keyframes ld-focus{from{opacity:0;filter:blur(14px);letter-spacing:.5em}to{opacity:1;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.ld-1,.ld-2{animation:none}}
 /* ---------- page ---------- */
 #app{display:none}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,48px);align-items:center;
@@ -195,6 +206,7 @@ async function unlock(id, pw){
   const buf = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(PAYLOAD.iv)}, key, b64(PAYLOAD.data));
   return new TextDecoder().decode(buf);
 }
+let loaderDone = null;
 function render(html){
   const app = document.getElementById("app");
   app.innerHTML = html;
@@ -203,9 +215,22 @@ function render(html){
   const hero = app.querySelector(".hero");
   if (hero) { const w = document.createElement("div"); w.className = "hero-wrap"; hero.before(w); w.append(hero); }
   const vis = app.querySelector(".hero-visual");
-  if (vis) initWater(vis);
+  if (vis) initWater(vis, loaderDone);
   initNav(app);
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+}
+/* ---------- 登入後 loading：海洋＋文字柔焦浮現，3 秒後淡出 ---------- */
+function showLoader(onDone){
+  const el = document.createElement("div");
+  el.className = "loader"; el.setAttribute("role", "status"); el.setAttribute("aria-label", "載入中");
+  el.innerHTML = '<div class="ld-txt"><span class="ld-1">kkamdol</span><span class="ld-2">Kiss・Hug</span></div>';
+  document.body.append(el); document.body.classList.add("loading");
+  const water = initWater(el);
+  setTimeout(() => {
+    water?.stop();                                    // 淡出時先停住海面，讓淡出順暢
+    el.classList.add("out");
+    setTimeout(() => { el.querySelector("canvas")?.getContext("webgl")?.getExtension("WEBGL_lose_context")?.loseContext(); el.remove(); document.body.classList.remove("loading"); onDone?.(); }, 700);
+  }, 3000);
 }
 /* ---------- 導覽：PC 懸浮＋目前位置／SP 漢堡選單 ---------- */
 function initNav(app){
@@ -255,7 +280,7 @@ function initNav(app){
   addEventListener("scroll", mark, {passive:true}); mark();
 }
 /* ---------- 主視覺：海底波光 (WebGL) ---------- */
-function initWater(hero){
+function initWater(hero, waitFor){
   const cv = document.createElement("canvas"); cv.className = "water"; cv.setAttribute("aria-hidden","true");
   const gl = cv.getContext("webgl", {antialias:false, premultipliedAlpha:false});
   if (!gl) return;                       // 不支援 → 保留單色背景
@@ -324,9 +349,18 @@ void main(){
   let visible = true, raf = 0; const t0 = performance.now();
   const draw = now => { gl.uniform1f(uT, (now - t0) / 1000 * 0.5 + 10.0); gl.drawArrays(gl.TRIANGLES, 0, 3); };
   const loop = now => { draw(now); raf = visible ? requestAnimationFrame(loop) : 0; };
-  if (still) { draw(t0); return; }
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(loop); }).observe(hero);
-  raf = requestAnimationFrame(loop);
+  const stop = () => {                                  // 停止動畫並釋放 WebGL 資源
+    visible = false; cancelAnimationFrame(raf); raf = 0; removeEventListener("resize", resize); io?.disconnect();
+  };
+  let io = null;
+  if (still) { draw(t0); return { stop }; }
+  const start = () => {
+    io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(loop); });
+    io.observe(hero);
+    raf = requestAnimationFrame(loop);
+  };
+  if (waitFor) { draw(t0); waitFor.then(start); } else start();   // loading 期間先停在第一格
+  return { stop };
 }
 document.getElementById("login").addEventListener("submit", async e => {
   e.preventDefault();
@@ -334,7 +368,9 @@ document.getElementById("login").addEventListener("submit", async e => {
   const id = document.getElementById("uid").value.trim(), pw = document.getElementById("pw").value;
   btn.disabled = true; err.textContent = "";
   try {
-    render(await unlock(id, pw));
+    const html = await unlock(id, pw);
+    let done; loaderDone = new Promise(r => done = r);
+    render(html); showLoader(done);
     sessionStorage.setItem(AUTH_KEY, JSON.stringify([id, pw]));
   } catch { err.textContent = "ID 或 PASSWORD 錯誤"; btn.disabled = false; }
 });
