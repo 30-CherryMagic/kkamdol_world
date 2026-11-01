@@ -1,6 +1,6 @@
 // 頁面設定：src → 輸出檔，及登入畫面標題
 export const PAGES = {
-  author:    { src: "src/content.html",   out: "index.html",           label: "PLLI 限定頁面" },
+  author:    { src: "src/content.html",   out: "index.html",           label: "此為受保護的頁面" },
   organizer: { src: "src/organizer.html", out: "organizer/index.html", label: "主辦限定頁面" },
 };
 export function pick() {
