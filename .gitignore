@@ -2,3 +2,5 @@ src/content.html
 *.pdf
 *.docx
 *.doc
+.preview/
+src/organizer.html
