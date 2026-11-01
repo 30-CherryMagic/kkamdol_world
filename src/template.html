@@ -16,19 +16,19 @@ const I18N = {
     prompt: "請輸入 ID 與 PASSWORD 以瀏覽內容", login: "登入", err: "ID 或 PASSWORD 錯誤", loading: "載入中",
     navOpen: "開啟目錄", navClose: "關閉目錄", lang: "語言", news: "最新消息（可捲動）",
     newsMore: n => `共 ${n} 則，在清單內往下捲動可看更早的消息` },
-  "zh-Hans": { html: "zh-Hans", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中版资料整理",
+  "zh-Hans": { html: "zh-Hans", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜简中版资料整理",
     prompt: "请输入 ID 和 PASSWORD 以浏览内容", login: "登录", err: "ID 或 PASSWORD 错误", loading: "加载中",
     navOpen: "打开目录", navClose: "关闭目录", lang: "语言", news: "最新消息（可滚动）",
     newsMore: n => `共 ${n} 条，在列表内向下滚动可查看更早的消息` },
-  "ja": { html: "ja", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁体字中国語版 資料まとめ",
+  "ja": { html: "ja", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜日本語版 資料まとめ",
     prompt: "ID と PASSWORD を入力してください", login: "ログイン", err: "ID または PASSWORD が正しくありません", loading: "読み込み中",
     navOpen: "目次を開く", navClose: "目次を閉じる", lang: "言語", news: "お知らせ（スクロールできます）",
     newsMore: n => `全 ${n} 件｜リスト内をスクロールすると過去のお知らせを見られます` },
-  "ko": { html: "ko", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜번체 중국어판 자료 정리",
+  "ko": { html: "ko", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT｜한국어판 자료 정리",
     prompt: "내용을 보려면 ID와 PASSWORD를 입력해 주세요", login: "로그인", err: "ID 또는 PASSWORD가 올바르지 않습니다", loading: "로딩 중",
     navOpen: "목차 열기", navClose: "목차 닫기", lang: "언어", news: "새 소식(스크롤 가능)",
     newsMore: n => `총 ${n}건 · 목록 안에서 아래로 스크롤하면 이전 소식을 볼 수 있습니다` },
-  "en": { html: "en", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT | Traditional Chinese Edition Info",
+  "en": { html: "en", title: "깜돌 WORLDWIDE ANTHOLOGY PROJECT | Creator Guide",
     prompt: "Enter your ID and PASSWORD to view this page.", login: "Log in", err: "Incorrect ID or PASSWORD", loading: "Loading",
     navOpen: "Open menu", navClose: "Close menu", lang: "Language", news: "News (scrollable)",
     newsMore: n => `${n} posts in total — scroll within the list to see older news` },
@@ -132,11 +132,14 @@ body.loading{overflow:hidden}
 }
 /* KV 面板：文字較長的語言只調整字距／大小，避免超出面板 */
 @media (max-width:640px){
+  :root:lang(ko) .kc-sub{letter-spacing:.215em}
   :root:lang(en) .kc-sub{top:calc(var(--u) * 214);width:calc(var(--u) * 190);white-space:normal;font-size:calc(var(--u) * 17);
     line-height:calc(var(--u) * 21);letter-spacing:.06em}
 }
 @media (min-width:641px){
   :root:lang(en) .kc-sub{letter-spacing:.04em}
+  :root:lang(ko) .kc-pair{letter-spacing:.132em}               /* 韓文：兩行同寬（比照中文版） */
+  :root:lang(ko) .kc-sub{letter-spacing:.092em}
 }
 .toc{position:sticky;top:14px;z-index:15;display:flex;gap:2px;width:fit-content;max-width:calc(100% - 32px);overflow-x:auto;
   margin:18px auto 0;padding:6px;border-radius:99px;background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
