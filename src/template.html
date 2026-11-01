@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <title>깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理</title>
 <style>
 :root{
@@ -14,7 +17,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.75}
+  font-family:"Noto Sans","Noto Sans TC","Noto Sans JP","Noto Sans KR","Noto Sans SC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.75}
 /* ---------- login ---------- */
 #gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--grad)}
 #gate form{background:#fff;border-radius:20px;padding:36px 32px;width:min(380px,100%);
@@ -30,7 +33,9 @@ body{margin:0;background:var(--bg);color:var(--ink);
 #err{color:#d33;font-size:.85rem;min-height:1.3em;margin-top:10px}
 /* ---------- page ---------- */
 #app{display:none}
-.hero{background:var(--grad);color:#fff;text-align:center;padding:64px 20px 56px}
+.hero{position:relative;overflow:hidden;background:var(--grad);color:#fff;text-align:center;padding:64px 20px 56px}
+.hero > *:not(canvas){position:relative;z-index:1;text-shadow:0 1px 12px rgba(5,20,70,.45)}
+.hero canvas.water{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
 .hero h1{margin:.2em 0;font-size:clamp(1.8rem,5vw,3rem);line-height:1.15;letter-spacing:.02em}
 .eyebrow{margin:0;letter-spacing:.2em;font-size:.85rem;color:#fff;font-weight:700}
 .sub{opacity:.95}
@@ -50,19 +55,29 @@ h4{margin:0 0 6px}
 .note{color:var(--muted);font-size:.88rem}
 .card strong{background:linear-gradient(transparent 55%,var(--neon) 55%);padding:0 2px}
 .callout{background:var(--soft);border-left:5px solid var(--neon);border-radius:12px;padding:14px 18px;margin:16px 0}
-.callout.soft{background:var(--soft)}
+.message{margin:36px 0 8px;padding:34px 8px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  text-align:center;position:relative}
+.message::before{content:"\201C";position:absolute;top:-30px;left:50%;transform:translateX(-50%);background:var(--card);
+  padding:0 14px;font-size:4rem;line-height:1;font-weight:900;color:var(--royal);font-family:Georgia,serif}
+.message blockquote{margin:0}
+.message p{margin:0 0 10px;font-size:1.05rem;line-height:2;font-weight:500}
+.message p.ask{margin-top:16px;font-size:.92rem;color:var(--muted);font-weight:400}
+.message figcaption{margin-top:18px;text-align:right;font-size:.8rem;color:var(--royal);font-weight:700;letter-spacing:.06em}
+@media (max-width:640px){.message .br{display:none}.message p{font-size:.98rem}}
 .badge{display:inline-block;background:#fff4d6;border-radius:8px;padding:2px 10px;font-size:.9rem}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:0 0 12px}
 .facts div{border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 .facts div.hl{border:2px solid var(--neon)}
 .facts dt{font-size:.78rem;color:var(--muted);font-weight:700;letter-spacing:.06em}
 .facts dd{margin:0;font-weight:600}
-.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0 4px}
-.pillars div{background:#fff;color:var(--ink);border:2px solid var(--royal);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:2px}
-.pillars .k{color:var(--ink);font-size:.8rem;font-weight:700;letter-spacing:.12em}
-.pillars .v{font-size:1.7rem;font-weight:800;line-height:1.3;color:var(--neon);
-  -webkit-text-stroke:4px var(--ink);paint-order:stroke fill;letter-spacing:.03em}
-.pillars .s{font-size:.85rem;color:var(--ink)}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,2vw,14px);margin:20px 0 4px}
+.pillars div{background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:0;aspect-ratio:1/1;
+  container-type:inline-size;padding:6%;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;gap:3cqw}
+.pillars .k{color:var(--ink);font-size:7.5cqw;font-weight:700;letter-spacing:.12em}
+.pillars .v{font-size:min(17cqw,3.2rem);font-weight:900;line-height:1.2;color:var(--royal);letter-spacing:.03em;white-space:nowrap}
+.pillars .s{font-size:6cqw;color:var(--ink);line-height:1.4}
+@media (max-width:640px){.pillars{grid-template-columns:1fr;justify-items:center}.pillars div{width:100%;max-width:240px}}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .mini{border:1px solid var(--line);border-radius:14px;padding:14px 18px}
@@ -128,7 +143,69 @@ function render(html){
   app.querySelector(".logout").onclick = () => { sessionStorage.removeItem(AUTH_KEY); location.reload(); };
   document.getElementById("gate").remove();
   app.style.display = "block";
+  const hero = app.querySelector(".hero");
+  if (hero) initWater(hero);
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+}
+/* ---------- 主視覺：海底波光 (WebGL) ---------- */
+function initWater(hero){
+  const cv = document.createElement("canvas"); cv.className = "water"; cv.setAttribute("aria-hidden","true");
+  const gl = cv.getContext("webgl", {antialias:false, premultipliedAlpha:false});
+  if (!gl) return;                       // 不支援 → 保留單色背景
+  hero.prepend(cv);
+  const vs = "attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
+  const fs = `precision mediump float;
+uniform vec2 R; uniform float T;
+// 扭曲座標後取 sin 網格的零線 → 細亮的波光網紋
+float net(vec2 p, float t){
+  for(int k=0;k<4;k++){
+    float fk=float(k);
+    p += 0.42*vec2(sin(p.y*1.3 + t*0.8 + fk*1.7), cos(p.x*1.1 - t*0.6 + fk*2.3));
+  }
+  float v = abs(sin(p.x)*sin(p.y));
+  return pow(1.0 - v, 14.0);
+}
+void main(){
+  vec2 uv = gl_FragCoord.xy / R;
+  vec2 p  = gl_FragCoord.xy / R.y * 4.2;
+  float t = T;
+  float c = net(p, t) * 0.65 + net(p*1.7 + 3.1, t*1.3) * 0.45;
+  c *= 0.55 + 0.45*uv.y;                               // 越接近水面越亮
+  // 從上方灑下的光束
+  float x = uv.x*R.x/R.y;
+  float rays = 0.0;
+  rays += pow(max(0.0, sin(x*2.3 + uv.y*0.9 + t*0.25)), 18.0);
+  rays += pow(max(0.0, sin(x*3.7 - uv.y*1.2 - t*0.18 + 1.7)), 26.0) * 0.7;
+  rays *= smoothstep(0.0, 1.0, uv.y) * 0.22;
+  vec3 deep  = vec3(0.075, 0.24, 0.72);
+  vec3 royal = vec3(0.122, 0.31, 0.85);
+  vec3 col = mix(deep, royal, 0.35 + 0.65*uv.y);
+  col += vec3(0.62, 0.86, 1.0) * c * 0.55;
+  col += vec3(0.75, 0.9, 1.0) * rays;
+  gl_FragColor = vec4(col, 1.0);
+}`;
+  const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
+  gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const uR = gl.getUniformLocation(pr, "R"), uT = gl.getUniformLocation(pr, "T");
+  const resize = () => {
+    const d = Math.min(devicePixelRatio || 1, 1.5);
+    cv.width = Math.round(hero.clientWidth * d); cv.height = Math.round(hero.clientHeight * d);
+    gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(uR, cv.width, cv.height);
+  };
+  resize(); addEventListener("resize", resize);
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let visible = true, raf = 0; const t0 = performance.now();
+  const draw = now => { gl.uniform1f(uT, (now - t0) / 1000 + 10.0); gl.drawArrays(gl.TRIANGLES, 0, 3); };
+  const loop = now => { draw(now); raf = visible ? requestAnimationFrame(loop) : 0; };
+  if (still) { draw(t0); return; }
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(loop); }).observe(hero);
+  raf = requestAnimationFrame(loop);
 }
 document.getElementById("login").addEventListener("submit", async e => {
   e.preventDefault();
