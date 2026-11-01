@@ -191,13 +191,16 @@ ul.check li::marker{content:"✓  ";color:var(--main)}
 .q-num:has(.inf){align-items:center;font-size:1.3rem}
 .q-note{font-size:.78rem;color:var(--muted);white-space:nowrap}
 .news-list{list-style:none;margin:0;padding:0}
+.news-list.scrollable{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-bottom:1px solid var(--line)}
+.news-more{margin:10px 0 0;font-size:.85rem;color:var(--muted)}
+.news-list.scrollable:focus-visible{outline:2px solid var(--main);outline-offset:4px}
 .news-list li{display:grid;grid-template-columns:7.5em 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
 .news-list li:first-child{border-top:0}
 .news-list time{color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums;padding-top:.1em}
 .news-list p{margin:0;white-space:pre-line;overflow-wrap:anywhere}
 .news-list a{color:var(--main)}
 .news-empty{margin:0;color:var(--muted)}
-.news-list:has(li) + .news-empty{display:none}
+.news-list:has(li) ~ .news-empty{display:none}
 @media (max-width:640px){.news-list li{grid-template-columns:1fr;gap:2px}}
 .scroll{overflow-x:auto}
 .spec{min-width:560px}
@@ -242,6 +245,7 @@ function render(html){
   const vis = app.querySelector(".hero-visual");
   if (vis) initWater(vis, loaderDone);
   initNav(app);
+  initNews(app);
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
 }
 /* ---------- 登入後 loading：海洋＋文字柔焦浮現，3 秒後淡出 ---------- */
@@ -256,6 +260,22 @@ function showLoader(onDone){
     el.classList.add("out");
     setTimeout(() => { el.querySelector("canvas")?.getContext("webgl")?.getExtension("WEBGL_lose_context")?.loseContext(); el.remove(); document.body.classList.remove("loading"); onDone?.(); }, 700);
   }, 3000);
+}
+/* ---------- 最新消息：最多顯示三則，其餘捲動 ---------- */
+function initNews(app){
+  const list = app.querySelector(".news-list"); if (!list) return;
+  const MAX = 3; let more = null;
+  const fit = () => {
+    const items = list.querySelectorAll("li");
+    if (items.length <= MAX) { list.classList.remove("scrollable"); list.style.maxHeight = ""; list.removeAttribute("tabindex"); more?.remove(); more = null; return; }
+    list.style.maxHeight = "";
+    const h = items[MAX - 1].getBoundingClientRect().bottom - list.getBoundingClientRect().top;
+    list.style.maxHeight = Math.ceil(h) + "px";
+    list.classList.add("scrollable"); list.tabIndex = 0; list.setAttribute("aria-label", "最新消息（可捲動）");
+    if (!more) { more = document.createElement("p"); more.className = "news-more"; list.after(more); }
+    more.textContent = `共 ${items.length} 則，在清單內往下捲動可看更早的消息`;
+  };
+  fit(); addEventListener("resize", fit); document.fonts?.ready.then(fit);
 }
 /* ---------- 導覽：PC 懸浮＋目前位置／SP 漢堡選單 ---------- */
 function initNav(app){
