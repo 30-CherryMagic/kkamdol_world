@@ -1,4 +1,5 @@
 src/content.html
+src/content.*.html
 *.pdf
 *.docx
 *.doc
