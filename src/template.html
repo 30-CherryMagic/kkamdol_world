@@ -190,6 +190,15 @@ ul.check li::marker{content:"✓  ";color:var(--main)}
 .q-num .inf{width:30px;height:30px;align-self:center}
 .q-num:has(.inf){align-items:center;font-size:1.3rem}
 .q-note{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.news-list{list-style:none;margin:0;padding:0}
+.news-list li{display:grid;grid-template-columns:7.5em 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.news-list li:first-child{border-top:0}
+.news-list time{color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums;padding-top:.1em}
+.news-list p{margin:0;white-space:pre-line;overflow-wrap:anywhere}
+.news-list a{color:var(--main)}
+.news-empty{margin:0;color:var(--muted)}
+.news-list:has(li) + .news-empty{display:none}
+@media (max-width:640px){.news-list li{grid-template-columns:1fr;gap:2px}}
 .scroll{overflow-x:auto}
 .spec{min-width:560px}
 .foot{text-align:center;color:var(--muted);font-size:.8rem;padding:20px 16px 40px}

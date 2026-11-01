@@ -16,3 +16,11 @@ KK_ID=<ID> KK_PW=<PASSWORD> node tools/decrypt.mjs author      # 還原原稿（
 # 編輯 src/*.html
 KK_ID=<ID> KK_PW=<PASSWORD> node tools/build.mjs author        # 重新產生加密頁面
 ```
+
+## 發佈最新消息（作者頁）
+
+```bash
+KK_ID=<ID> KK_PW=<PASSWORD> node tools/decrypt.mjs author   # 還原原稿（已還原過可略過）
+node tools/news.mjs 2026-11-02 "消息內容"                     # 新增到最上面；網址自動變連結，\n 可換行
+KK_ID=<ID> KK_PW=<PASSWORD> node tools/build.mjs author     # 重新加密
+```
