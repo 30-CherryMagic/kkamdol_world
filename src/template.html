@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@500;600;700&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Black+Han+Sans&family=MuseoModerno:wght@500;600;700&family=Mooli&family=Moulpali&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
 <title>깜돌 WORLDWIDE ANTHOLOGY PROJECT｜繁中資料整理</title>
 <style>
 :root{
@@ -44,29 +44,24 @@ body.loading{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.ld-1,.ld-2{animation:none}}
 /* ---------- page ---------- */
 #app{display:none}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,48px);align-items:center;
-  max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,32px) 44px}
-.hero-text{color:var(--ink);padding-top:44px}
-/* 標題（依 Figma 設計：1em = 設計稿 10px） */
-.kv-title{display:flex;flex-direction:column;align-items:flex-start;margin:0 0 22px;font-size:clamp(10px,0.55vw + 8.5px,16px);
-  font-weight:400;line-height:1;color:#000}
-.kt-tag{position:relative;z-index:1;margin-left:.5em;font-family:"MuseoModerno",sans-serif;font-weight:600;font-size:1.4em;letter-spacing:.1em;color:#1265ff;line-height:1.57}
-.kt-heart{margin-left:.45em;font-size:.8em;letter-spacing:.1em;vertical-align:.05em}
-.kt-main{margin-top:.085em;font-family:"Black Han Sans",sans-serif;font-size:9.2em;letter-spacing:.1em;line-height:.8}
-.kt-sub{margin:-.1em 0 0 .3em;font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:700;font-size:2em;letter-spacing:.3em;line-height:1.35}
-.kt-en{margin:-.1em 0 0 .6em;font-family:"Moulpali",sans-serif;font-size:1em;letter-spacing:.1em;color:#afafaf;line-height:2.2}
-.hero-text .eyebrow + .sub{margin-top:12px}
-.pair{margin:0 0 10px;font-weight:700;font-size:1.05rem;color:#000;letter-spacing:.06em}
-.pair span{background:linear-gradient(transparent 55%,var(--neon) 55%);padding:0 3px}
-.eyebrow{display:inline-block;margin:0;background:var(--main);color:#fff;font-weight:700;font-size:.8rem;letter-spacing:.14em;
-  padding:5px 12px;border-radius:99px}
-.sub{color:var(--muted);margin:0}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.chips span{background:#fff;border:1px solid #d5dcde;color:var(--ink);padding:4px 12px;border-radius:99px;font-size:.85rem;font-weight:500}
-.hero-visual{position:relative;align-self:start;aspect-ratio:4/3;overflow:hidden;background:#29a9dc}
+/* ---------- KV：滿版海洋＋書籤式白色面板（依 Figma 7:20；--u = 設計稿 1px） ---------- */
+.hero-wrap{background:none;border:0}
+.hero{--u:clamp(1.2px, .1vw + 1px, 1.5px);position:relative;overflow:hidden;background:#29a9dc;
+  height:max(calc(var(--u) * 350 + 72px), min(72vh, 680px))}
+.hero-visual{position:absolute;inset:0}
 .hero-visual canvas.water{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hero-wrap{background:var(--card);border-bottom:1px solid var(--line)}
-@media (max-width:760px){.hero{grid-template-columns:1fr;gap:0}.hero-visual{order:-1;aspect-ratio:16/9}.hero-text{padding-top:24px}}
+.kv-card{position:absolute;top:0;left:max(24px, calc((100% - 1120px) / 2 + 32px));width:calc(var(--u) * 218);height:calc(var(--u) * 350);
+  background:#fff;border-radius:0 0 calc(var(--u) * 10) calc(var(--u) * 10);color:#000}
+.kv-h1{display:contents;margin:0;font-weight:400}
+.kc{position:absolute;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap;text-align:center;line-height:normal}
+.kc-heart{top:calc(var(--u) * 26);font-size:calc(var(--u) * 12);line-height:calc(var(--u) * 14)}
+.kc-tag{top:calc(var(--u) * 49);font-family:"MuseoModerno",sans-serif;font-weight:600;font-size:calc(var(--u) * 14);letter-spacing:.1em;color:#1265ff}
+.kc-main{top:calc(var(--u) * 82);font-family:"Black Han Sans",sans-serif;font-size:calc(var(--u) * 92);letter-spacing:.1em;line-height:calc(var(--u) * 86)}
+.kc-pair{top:calc(var(--u) * 163);font-family:"MuseoModerno","Noto Sans TC",sans-serif;font-weight:600;font-size:calc(var(--u) * 14);letter-spacing:.2em}
+.kc-sub{top:calc(var(--u) * 234);font-family:"Noto Sans TC","Noto Sans",sans-serif;font-weight:700;font-size:calc(var(--u) * 20);letter-spacing:.3em}
+.kc-en{top:calc(var(--u) * 263);font-family:"Moulpali",sans-serif;font-size:calc(var(--u) * 10);letter-spacing:.1em;color:#afafaf}
+.kc-note{top:calc(var(--u) * 285);font-family:"Mooli","Noto Sans TC",sans-serif;font-size:calc(var(--u) * 10);letter-spacing:.1em;line-height:calc(var(--u) * 22)}
+@media (max-width:640px){.kv-card{left:50%;transform:translateX(-50%)}}
 .toc{position:sticky;top:14px;z-index:15;display:flex;gap:2px;width:fit-content;max-width:calc(100% - 32px);overflow-x:auto;
   margin:18px auto 0;padding:6px;border-radius:99px;background:rgba(255,255,255,.82);backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);border:1px solid var(--line);box-shadow:0 8px 24px rgba(20,40,100,.12);scrollbar-width:none}
