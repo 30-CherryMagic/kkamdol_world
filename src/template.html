@@ -158,8 +158,11 @@ h4{margin:0 0 6px}
 .ico{width:22px;height:22px}
 .ng{border-radius:14px;padding:14px 18px;background:#fff6f6;border:1px solid #f5d5d5}
 .ng h4{color:#c0392b}
-.ng li::marker{content:"✕  ";color:#c0392b}
-ul.check li::marker{content:"✓  ";color:var(--main)}
+.ng ul,ul.check{list-style:none;padding-left:0}
+.ng li,ul.check li{position:relative;padding-left:1.6em}
+.ng li::before,ul.check li::before{position:absolute;left:.15em;top:0;font-weight:700}
+.ng li::before{content:"✕";color:#c0392b}
+ul.check li::before{content:"✓";color:var(--main)}
 .tbl{width:100%;border-collapse:collapse;font-size:.92rem;margin:8px 0}
 .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
 .tbl th{background:var(--soft);color:var(--main-d);font-size:.82rem;letter-spacing:.04em}
