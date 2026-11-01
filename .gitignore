@@ -3,3 +3,4 @@ src/content.html
 *.docx
 *.doc
 .preview/
+src/organizer.html

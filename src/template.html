@@ -70,6 +70,7 @@ ul.check li::marker{content:"✓  ";color:var(--royal)}
 .tbl{width:100%;border-collapse:collapse;font-size:.92rem;margin:8px 0}
 .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
 .tbl th{background:#0b1a4d;color:#fff;font-size:.82rem;letter-spacing:.04em}
+.tbl td:first-child{white-space:nowrap}
 .tbl td.todo{color:#b07a00;background:#fffaf0}
 .timeline{list-style:none;margin:8px 0 0;padding:0 0 0 28px;position:relative}
 .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:3px;border-radius:3px;
@@ -86,6 +87,7 @@ ul.check li::marker{content:"✓  ";color:var(--royal)}
 .scroll{overflow-x:auto}
 .spec{min-width:560px}
 .foot{text-align:center;color:#7d88aa;font-size:.8rem;padding:20px 16px 40px}
+.foot a{color:var(--neon)}
 .logout{position:fixed;right:14px;bottom:14px;z-index:9;border:0;border-radius:99px;padding:8px 14px;
   background:var(--royal);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer;font-family:inherit;font-size:.8rem}
 </style>
@@ -93,7 +95,7 @@ ul.check li::marker{content:"✓  ";color:var(--royal)}
 <body>
 <div id="gate">
   <form id="login" autocomplete="on">
-    <h1>🔒 PLLI 限定頁面</h1>
+    <h1>🔒 __LABEL__</h1>
     <p>請輸入 ID 與 PASSWORD 以瀏覽內容</p>
     <label for="uid">ID</label>
     <input id="uid" name="username" autocomplete="username" required autofocus>
@@ -106,6 +108,7 @@ ul.check li::marker{content:"✓  ";color:var(--royal)}
 <div id="app"></div>
 <script>
 const PAYLOAD = /*PAYLOAD*/null;
+const AUTH_KEY = "kk_auth:" + location.pathname.replace(/index\.html$/, "");
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 async function unlock(id, pw){
   const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(id + ":" + pw), "PBKDF2", false, ["deriveKey"]);
@@ -118,7 +121,7 @@ async function unlock(id, pw){
 function render(html){
   const app = document.getElementById("app");
   app.innerHTML = html + '<button class="logout" type="button">登出</button>';
-  app.querySelector(".logout").onclick = () => { sessionStorage.removeItem("kk_auth"); location.reload(); };
+  app.querySelector(".logout").onclick = () => { sessionStorage.removeItem(AUTH_KEY); location.reload(); };
   document.getElementById("gate").remove();
   app.style.display = "block";
   if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
@@ -130,13 +133,13 @@ document.getElementById("login").addEventListener("submit", async e => {
   btn.disabled = true; err.textContent = "";
   try {
     render(await unlock(id, pw));
-    sessionStorage.setItem("kk_auth", JSON.stringify([id, pw]));
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify([id, pw]));
   } catch { err.textContent = "ID 或 PASSWORD 錯誤"; btn.disabled = false; }
 });
 (async () => {
-  const saved = sessionStorage.getItem("kk_auth");
+  const saved = sessionStorage.getItem(AUTH_KEY);
   if (!saved) return;
-  try { render(await unlock(...JSON.parse(saved))); } catch { sessionStorage.removeItem("kk_auth"); }
+  try { render(await unlock(...JSON.parse(saved))); } catch { sessionStorage.removeItem(AUTH_KEY); }
 })();
 </script>
 </body>
