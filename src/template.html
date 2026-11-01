@@ -46,12 +46,12 @@ body.loading{overflow:hidden}
 #app{display:none}
 /* ---------- KV：滿版海洋＋書籤式白色面板（依 Figma 7:20；--u = 設計稿 1px） ---------- */
 .hero-wrap{background:none;border:0}
-.hero{--u:clamp(1.2px, .1vw + 1px, 1.5px);position:relative;overflow:hidden;background:#29a9dc;
-  height:max(calc(var(--u) * 350 + 72px), min(72vh, 680px))}
+.hero{--u:clamp(1.1px, .06vw + .95px, 1.25px);position:relative;overflow:hidden;background:#29a9dc;
+  height:calc(var(--u) * 350 + 64px)}
 .hero-visual{position:absolute;inset:0}
 .hero-visual canvas.water{position:absolute;inset:0;width:100%;height:100%;display:block}
 .kv-card{position:absolute;top:0;left:max(16px, calc((100% - 960px) / 2 + 16px));      /* 與 main 內容左緣對齊 */width:calc(var(--u) * 218);height:calc(var(--u) * 350);
-  background:#fff;border-radius:0 0 calc(var(--u) * 10) calc(var(--u) * 10);color:#000}
+  background:#fff;border-radius:0 0 calc(var(--u) * 10) calc(var(--u) * 10);color:#000;box-shadow:0 12px 32px rgba(10,40,90,.22)}
 .kv-h1{display:contents;margin:0;font-weight:400}
 .kc{position:absolute;left:50%;transform:translateX(-50%);margin:0;white-space:nowrap;text-align:center;line-height:normal}
 .kc-heart{top:calc(var(--u) * 26);font-size:calc(var(--u) * 12);line-height:calc(var(--u) * 14)}
