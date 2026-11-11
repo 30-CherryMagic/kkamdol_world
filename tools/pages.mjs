@@ -19,12 +19,6 @@ export const PAGES = {
       "en":      { src: "src/content.en.html",      label: "This page is protected" },
     },
   },
-  organizer: {
-    out: "organizer/index.html",
-    langs: {
-      "zh-Hant": { src: "src/organizer.html", label: "主辦限定頁面" },
-    },
-  },
 };
 export function pick() {
   const name = process.argv[2] || "author";

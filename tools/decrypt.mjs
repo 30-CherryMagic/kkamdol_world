@@ -1,5 +1,5 @@
 // 從輸出 HTML 還原頁面原稿（編輯前使用）
-// 使用方式: KK_ID=xxx KK_PW=yyy node tools/decrypt.mjs [author|organizer]
+// 使用方式: KK_ID=xxx KK_PW=yyy node tools/decrypt.mjs [author]
 // 多語言頁面會還原所有語言的原稿；舊格式（單一 HTML）還原成第一個語言
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { webcrypto as crypto } from "node:crypto";
