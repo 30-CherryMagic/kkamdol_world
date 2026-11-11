@@ -1,5 +1,5 @@
 // 加密頁面原稿 → 輸出 HTML
-// 使用方式: KK_ID=xxx KK_PW=yyy node tools/build.mjs [author|organizer]
+// 使用方式: KK_ID=xxx KK_PW=yyy node tools/build.mjs [author]
 // 多語言頁面：各語言原稿合併成一份 JSON {v:2, pages:{語言:HTML}} 後加密（帳密共用）
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { webcrypto as crypto } from "node:crypto";
