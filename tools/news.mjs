@@ -2,7 +2,7 @@
 // 使用方式:
 //   node tools/news.mjs 2026-11-02 "消息內容"              → 所有已還原的語言原稿都加入同一則
 //   node tools/news.mjs --lang ja 2026-11-02 "お知らせ"     → 只加入指定語言（zh-Hant / zh-Hans / ja / ko / en）
-//   日期格式 YYYY-MM-DD，可加時間 HH:MM（台灣時間，例：2026-11-12 14:30）；內容照原樣顯示（不會自動翻譯），網址會自動變成連結，\n 可換行
+//   日期格式 YYYY-MM-DD，可加時間 HH:MM（台灣時間，例：2026-11-12 14:30）；內容照原樣顯示（不會自動翻譯），網址會自動變成連結，[文字](#區塊id) 會變成頁內連結，\n 可換行
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { PAGES } from "./pages.mjs";
 
@@ -25,7 +25,9 @@ if (!targets.length || (only && !existsSync(new URL(langs[only].src, root)))) {
 }
 
 const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const body = esc(text).replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+const body = esc(text)
+  .replace(/\[([^\]]+)\]\((#[A-Za-z0-9_-]+)\)/g, (_, t, h) => `<a href="${h}">${t}</a>`)
+  .replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
 const shown = date.replaceAll("-", ".") + (time ? ` ${time}` : "");
 const stamp = time ? `${date}T${time}+08:00` : date;
 const item = `    <li><time datetime="${stamp}">${shown}</time><p>${body}</p></li>\n`;
