@@ -38,6 +38,7 @@ KK_ID=<ID> KK_PW=<PASSWORD> node tools/build.mjs author        # 重新產生加
 ```bash
 KK_ID=<ID> KK_PW=<PASSWORD> node tools/decrypt.mjs author   # 還原原稿（已還原過可略過）
 node tools/news.mjs 2026-11-02 14:30 "新增「[創作 Q&A](#faq)」"  # 時間可省略；[文字](#區塊id) 是頁內連結
+node tools/news.mjs --note "具體變更內容\n第二行" 2026-11-02 "消息內容"  # --note：消息下方的灰色小字
 node tools/news.mjs 2026-11-02 "消息內容"                     # 新增到所有語言的最上面；網址自動變連結，\n 可換行
 node tools/news.mjs --lang ja 2026-11-02 "お知らせ"           # 只新增到指定語言（zh-Hant / zh-Hans / ja / ko / en）
 KK_ID=<ID> KK_PW=<PASSWORD> node tools/build.mjs author     # 重新加密
